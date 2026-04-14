@@ -29,11 +29,14 @@ jobs:
   Pgskipper-Pipeline:
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: Wait-for-images
-    uses: Netcracker/qubership-test-pipelines/.github/workflows/pgskipper.yaml@acf44dc8f22430d11eb93a679bf54e99b69ee6a2 #v1.5.0
+    # No write access to Netcracker/qubership-test-pipelines is required: fork that public repo into your GitHub user,
+    # in .github/workflows/pgskipper.yaml (prepare / Checkout pipeline) set repository: Netcracker/qubership-test-pipelines,
+    # push to main, then this "uses" line works. Same ref as pipeline_branch below.
+    uses: elbe0116/qubership-test-pipelines/.github/workflows/pgskipper.yaml@main
     with:
       repository_name: ${{ github.repository }}
       service_branch: '${{ github.head_ref || github.ref_name }}'
-      pipeline_branch: 'acf44dc8f22430d11eb93a679bf54e99b69ee6a2' #this value must match the value after '@' in 'uses'
+      pipeline_branch: 'main'
     secrets:
       AWS_S3_ACCESS_KEY_ID: ${{secrets.AWS_S3_ACCESS_KEY_ID}}
       AWS_S3_ACCESS_KEY_SECRET: ${{secrets.AWS_S3_ACCESS_KEY_SECRET}}
